@@ -3,6 +3,7 @@ console.log("General Kenobi");
 // Require / Imports
 const express = require("express");
 const mysql = require("mysql2");
+const bcrypt = require("bcrypt");
 const cors = require("cors");
 require("dotenv").config();
 
@@ -14,6 +15,9 @@ const config = {
   database: process.env.DATABASE_DATABASE,
 };
 const app = express();
+
+// Enables JSON to be read
+app.use(express.json());
 
 // Creates pool for MySql Connections
 const pool = mysql.createPool(config);
