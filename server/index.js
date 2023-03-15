@@ -25,7 +25,24 @@ const pool = mysql.createPool(config);
 // Code - Functionality
 
 // POST Register
-app.post("/register", (req, res) => {});
+app.post("/register", (req, res) => {
+  const { username, password } = req.body;
+
+  const sql = `
+  INSERT INTO users(username, password)
+  VALUES(?, ?)
+  `;
+
+  pool.execute(sql, [username, password], (error, result) => {
+    if (error) {
+      console.error(error);
+      res.sendStatus(500);
+    } else {
+      console.log(result);
+      res.json(result).status(200);
+    }
+  });
+});
 
 // POST Login
 app.post("/login", (req, res) => {});
