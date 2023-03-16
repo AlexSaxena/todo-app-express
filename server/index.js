@@ -51,21 +51,37 @@ app.post("/register", (req, res) => {
 // POST Login User
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
-  const sqlUPassword = `Select password from users WHERE username = ?`;
+  const sqlUPassword = `Select user_id, username, password from users WHERE username = ?`;
+
   pool.execute(sqlUPassword, [username], (error, result) => {
     if (error) {
       console.error(error);
       res.sendStatus(500);
+    }
+    if (result.length < 1) {
+      res.status(404).send("User Not Found");
     } else {
+      console.log(result);
       const resPassword = result[0].password;
       const passCompare = bcrypt.compareSync(password, resPassword);
 
-      // console.log(password, resPassword, password === resPassword);
-      // console.log(passCompare);
-
       if (passCompare) {
-        // res.send("Success").status(200);
-        res.json(result).status(200);
+        let userCopy = Object.assign({}, result[0]);
+        delete userCopy.password;
+
+        const loginToken = jwt.sign(userCopy, process.env.ACCESS_TOKEN_SECRET, {
+          expiresIn: 42000,
+        });
+
+        // Cookie
+        res.cookie("loginToken", loginToken, {
+          maxAge: 4201337,
+          sameSite: "none",
+          httpOnly: true,
+          // secure: true,
+        });
+
+        res.json({ loginToken: loginToken }).status(200);
       } else {
         res.sendStatus(401);
       }
@@ -74,7 +90,7 @@ app.post("/login", (req, res) => {
 });
 
 // POST Add ToDo
-app.post("/addTodo", (req, res) => {});
+app.post("/todos", (req, res) => {});
 
 // GET Show All ToDos
 app.get("/", (req, res) => {});
