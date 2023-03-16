@@ -28,12 +28,15 @@ const pool = mysql.createPool(config);
 app.post("/register", (req, res) => {
   const { username, password } = req.body;
 
+  const salt = bcrypt.genSaltSync(10);
+  const cryptedPassword = bcrypt.hashSync(password, salt);
+
   const sql = `
   INSERT INTO users(username, password)
   VALUES(?, ?)
   `;
 
-  pool.execute(sql, [username, password], (error, result) => {
+  pool.execute(sql, [username, cryptedPassword], (error, result) => {
     if (error) {
       console.error(error);
       res.sendStatus(500);
