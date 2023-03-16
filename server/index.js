@@ -5,6 +5,7 @@ const express = require("express");
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
 
@@ -17,9 +18,10 @@ const config = {
 };
 const app = express();
 
+// Enables Cookies to be read
+app.use(cookieParser());
 // Enables JSON to be read
 app.use(express.json());
-
 // Creates pool for MySql Connections
 const pool = mysql.createPool(config);
 
@@ -70,7 +72,7 @@ app.post("/login", (req, res) => {
         delete userCopy.password;
 
         const loginToken = jwt.sign(userCopy, process.env.ACCESS_TOKEN_SECRET, {
-          expiresIn: 42000,
+          expiresIn: 4201337,
         });
 
         // Cookie
@@ -82,6 +84,7 @@ app.post("/login", (req, res) => {
         });
 
         res.json({ loginToken: loginToken }).status(200);
+        return;
       } else {
         res.sendStatus(401);
       }
@@ -90,10 +93,37 @@ app.post("/login", (req, res) => {
 });
 
 // POST Add ToDo
-app.post("/todos", (req, res) => {});
+app.post("/todos", checkLoginToken, (req, res) => {
+  res.send("Todos");
+});
 
 // GET Show All ToDos
 app.get("/", (req, res) => {});
 
 // Server Port
-app.listen(5050);
+app.listen(5050, () => {
+  console.log("Server running on http://localhost:5050");
+});
+
+// Middleware
+
+function checkLoginToken(req, res, next) {
+  if (!req.cookies.loginToken) {
+    res.status(404).send("No Active LoginToken");
+    return;
+  }
+  try {
+    const loginToken = req.cookies.loginToken;
+    const loggedInUser = jwt.verify(
+      loginToken,
+      process.env.ACCESS_TOKEN_SECRET
+    );
+    req.loggedInUser = loggedInUser;
+    next();
+    return;
+  } catch (error) {
+    console.error(error);
+    res.status(401).send("Unauthorized LoginToken");
+    return;
+  }
+}
