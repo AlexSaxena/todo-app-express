@@ -48,7 +48,27 @@ app.post("/register", (req, res) => {
 });
 
 // POST Login
-app.post("/login", (req, res) => {});
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  const sqlUPassword = `Select password from users WHERE username = ?`;
+  pool.execute(sqlUPassword, [username], (error, result) => {
+    if (error) {
+      console.error(error);
+      res.sendStatus(500);
+    } else {
+      const resPassword = result[0].password;
+      // console.log(result[0].password);
+      const passCompare = bcrypt.compareSync(password, resPassword);
+      console.log(password, resPassword, password === resPassword);
+      console.log(passCompare);
+      if (passCompare) {
+        res.json(result).status(200);
+      } else {
+        res.sendStatus(401);
+      }
+    }
+  });
+});
 
 // POST Add ToDo
 app.post("/addTodo", (req, res) => {});
