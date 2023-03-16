@@ -4,6 +4,7 @@ console.log("General Kenobi");
 const express = require("express");
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const cors = require("cors");
 require("dotenv").config();
 
@@ -24,7 +25,7 @@ const pool = mysql.createPool(config);
 
 // Code - Functionality
 
-// POST Register
+// POST Register User
 app.post("/register", (req, res) => {
   const { username, password } = req.body;
 
@@ -47,7 +48,7 @@ app.post("/register", (req, res) => {
   });
 });
 
-// POST Login
+// POST Login User
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
   const sqlUPassword = `Select password from users WHERE username = ?`;
@@ -57,11 +58,13 @@ app.post("/login", (req, res) => {
       res.sendStatus(500);
     } else {
       const resPassword = result[0].password;
-      // console.log(result[0].password);
       const passCompare = bcrypt.compareSync(password, resPassword);
-      console.log(password, resPassword, password === resPassword);
-      console.log(passCompare);
+
+      // console.log(password, resPassword, password === resPassword);
+      // console.log(passCompare);
+
       if (passCompare) {
+        // res.send("Success").status(200);
         res.json(result).status(200);
       } else {
         res.sendStatus(401);
