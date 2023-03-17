@@ -134,6 +134,33 @@ app.post("/todos", checkLoginToken, (req, res) => {
   });
 });
 
+// Update Todo -> done true/false
+// Patch updates certain part Put updates entire entity
+// Send todo_id inside request ie. user sends desired todo item to be changed
+// FronteEnd must send todo_id & Completed in Fetch body: request
+app.patch("/todos", checkLoginToken, (req, res) => {
+  let user_id = req.loggedInUser.user_id;
+  const { todo_id, completed } = req.body;
+  //const sqlTodoCompleted = `UPDATE todos SET completed = (? - 1)*-1 WHERE todo_id= ? AND user_id = ? `;
+  const sqlTodoCompleted = `UPDATE todos SET completed = ? WHERE todo_id= ? AND user_id = ? `;
+
+  pool.execute(
+    sqlTodoCompleted,
+    [completed, todo_id, user_id],
+    (error, result) => {
+      if (error) {
+        console.error("Error sql Patch -> ", error);
+        res.sendStatus(500);
+        return;
+      } else {
+        console.log(result);
+        res.status(200).send("Patch Completed!");
+        return;
+      }
+    }
+  );
+});
+
 // Server Port
 app.listen(5050, () => {
   console.log(`\x1b[33m  Server running on http://localhost:5050 \x1b[0m`);
