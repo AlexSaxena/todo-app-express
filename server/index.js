@@ -9,6 +9,8 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
 
+const { checkLoginToken } = require("./middlewares/checkLoginToken");
+
 // MySql Configurations / Definitions
 const config = {
   user: process.env.DATABASE_USER,
@@ -93,7 +95,8 @@ app.post("/login", (req, res) => {
 });
 
 // POST Add ToDo
-app.post("/todos", checkLoginToken, (req, res) => {
+app.get("/todos", checkLoginToken, (req, res) => {
+  console.log("todos-req.loggedInUser ->", req.loggedInUser);
   res.send("Todos");
 });
 
@@ -104,26 +107,3 @@ app.get("/", (req, res) => {});
 app.listen(5050, () => {
   console.log("Server running on http://localhost:5050");
 });
-
-// Middleware
-
-function checkLoginToken(req, res, next) {
-  if (!req.cookies.loginToken) {
-    res.status(404).send("No Active LoginToken");
-    return;
-  }
-  try {
-    const loginToken = req.cookies.loginToken;
-    const loggedInUser = jwt.verify(
-      loginToken,
-      process.env.ACCESS_TOKEN_SECRET
-    );
-    req.loggedInUser = loggedInUser;
-    next();
-    return;
-  } catch (error) {
-    console.error(error);
-    res.status(401).send("Unauthorized LoginToken");
-    return;
-  }
-}
