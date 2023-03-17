@@ -94,14 +94,29 @@ app.post("/login", (req, res) => {
   });
 });
 
-// POST Add ToDo
+// Get ToDos
 app.get("/todos", checkLoginToken, (req, res) => {
   console.log("todos-req.loggedInUser ->", req.loggedInUser);
-  res.send("Todos");
+
+  let user_id = req.loggedInUser.user_id;
+
+  const sqlTodos = `SELECT todo_id, todo, completed FROM todos WHERE user_id=?`;
+
+  pool.execute(sqlTodos, [user_id], (error, result) => {
+    if (error) {
+      console.error(error);
+      res.sendStatus(500);
+      return;
+    } else {
+      console.log(result);
+      res.json(result).status(200);
+      return;
+    }
+  });
 });
 
-// GET Show All ToDos
-app.get("/", (req, res) => {});
+// POST ToDo
+app.post("/", (req, res) => {});
 
 // Server Port
 app.listen(5050, () => {
