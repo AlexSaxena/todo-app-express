@@ -153,12 +153,29 @@ app.patch("/todos", checkLoginToken, (req, res) => {
         res.sendStatus(500);
         return;
       } else {
-        console.log(result);
+        console.log("Patch result -> ", result);
         res.status(200).send("Patch Completed!");
         return;
       }
     }
   );
+});
+
+// Delete Todo Item
+app.delete("/todos", checkLoginToken, (req, res) => {
+  let user_id = req.loggedInUser.user_id;
+  const { todo_id } = req.body;
+
+  const sqlDeleteTodo = `DELETE FROM todos WHERE todo_id = ? AND user_id = ?;`;
+
+  pool.execute(sqlDeleteTodo, [todo_id, user_id], (error, result) => {
+    if (error) {
+      console.log("Error Sql Delete ->", error);
+    } else {
+      console.log("Delete result -> ", result);
+      res.status(204).send("Todo Deleted!");
+    }
+  });
 });
 
 // Server Port
