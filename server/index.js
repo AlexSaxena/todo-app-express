@@ -116,9 +116,25 @@ app.get("/todos", checkLoginToken, (req, res) => {
 });
 
 // POST ToDo
-app.post("/", (req, res) => {});
+app.post("/todos", checkLoginToken, (req, res) => {
+  let user_id = req.loggedInUser.user_id;
+  const { todo, completed } = req.body;
+  const sqlNewTodo = `INSERT INTO todos(user_id, todo, completed) VALUES(?,?,?)`;
+
+  pool.execute(sqlNewTodo, [user_id, todo, completed], (error, result) => {
+    if (error) {
+      console.error(error);
+      res.sendStatus(500);
+      return;
+    } else {
+      console.log(result);
+      res.status(200).send("New Todo Added!");
+      return;
+    }
+  });
+});
 
 // Server Port
 app.listen(5050, () => {
-  console.log("Server running on http://localhost:5050");
+  console.log(`\x1b[33m  Server running on http://localhost:5050 \x1b[0m`);
 });
