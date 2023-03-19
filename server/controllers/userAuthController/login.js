@@ -23,7 +23,7 @@ const login = function login(req, res) {
       res.sendStatus(500);
     }
     if (result.length < 1) {
-      res.status(404).send("User Not Found");
+      res.status(404).json({ message: "User Not Found" });
     } else {
       console.log(result);
       const resPassword = result[0].password;
@@ -45,10 +45,12 @@ const login = function login(req, res) {
           // secure: true,
         });
 
-        res.json({ loginToken: loginToken }).status(200);
+        res
+          .json({ message: "Successful login", loginToken: loginToken })
+          .status(200);
         return;
       } else {
-        res.sendStatus(401);
+        res.json({ message: "Unsuccessful login" }).sendStatus(401);
       }
     }
   });
