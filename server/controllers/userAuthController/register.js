@@ -29,7 +29,7 @@ const register = function (req, res) {
       res.sendStatus(500);
     } else {
       console.log(result);
-      res.json(result).status(200);
+      res.json({ message: "New User Added", result: result }).status(200);
     }
   });
 };
