@@ -42,7 +42,7 @@ const login = function login(req, res) {
           maxAge: 4201337,
           sameSite: "none",
           httpOnly: true,
-          // secure: true,
+          secure: true,
         });
 
         res
