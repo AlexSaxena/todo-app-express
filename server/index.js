@@ -13,8 +13,14 @@ const { userTodoRoutes } = require("./routes/userTodosRoutes");
 const app = express();
 
 // Enables Cookies & JSON to be read
-app.use(cookieParser());
 app.use(express.json());
+app.use(
+  cors({
+    origin: "http://127.0.0.1:5500",
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 
 // Route -> /login & /register
 app.use("/", userAuthRoutes);
