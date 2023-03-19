@@ -4,6 +4,7 @@ let loginForm = document.querySelector(".login-form");
 let inputUsername = document.querySelector("#username");
 let inputPassword = document.querySelector("#password");
 let formLoginBtn = document.querySelector(".loginFormBtn");
+let responseOutput = document.querySelector(".h3-response");
 
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -24,5 +25,5 @@ loginForm.addEventListener("submit", async (e) => {
   console.log("Data ->", data);
   console.log("response ->", response);
 
-  h2.textContent = response.message;
+  responseOutput.textContent = data.message;
 });
