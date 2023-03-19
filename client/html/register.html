@@ -5,9 +5,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="data:;base64,=" />
+    <script src="../javascript/register.js" type="module"></script>
     <title>Registration Page</title>
   </head>
-  <body>
-    <h1>Registration Page</h1>
+  <body
+    style="
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      min-height: 99vh;
+    "
+  >
+    <h1 style="padding: 3rem">Register Page</h1>
+    <form
+      class="register-form"
+      style="
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        border: solid black 2px;
+        padding: 2rem;
+      "
+    >
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" />
+      </div>
+      <button class="register-form-btn">Register</button>
+    </form>
+    <h3 class="h3-response"></h3>
+    <p>Already a<a href="/client/html/login.html"> member</a>?</p>
   </body>
 </html>
