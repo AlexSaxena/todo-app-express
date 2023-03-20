@@ -22,7 +22,7 @@ const postTodo = function postTodo(req, res) {
       return;
     } else {
       console.log(result);
-      res.status(200).send("New Todo Added!");
+      res.status(200).json({ message: "New Todo Added!" });
       return;
     }
   });
