@@ -86,13 +86,23 @@ async function deleteTodo(todo_id) {
 
 // Function for rendering Todos on Page
 function renderTodos(todos) {
+  // Clears List
   while (list.firstChild) {
     list.removeChild(list.lastChild);
   }
 
   // Check not logged in
-  console.log("Todos ->", todos);
+  if (todos.message == "No Active LoginToken") {
+    let h2 = document.createElement("h2");
+    let btnHome = document.createElement("button");
+    h2.textContent = "Not Logged In!";
+    btnHome.textContent = "Take Me Home!";
+    btnHome.addEventListener("click", () => (window.location = "/client/html"));
+    list.append(h2, btnHome);
+    return;
+  }
 
+  // Render Each Todo
   todos.forEach((item) => {
     let li = document.createElement("li");
     let btnComplete = document.createElement("button");
