@@ -4,22 +4,15 @@ let todoForm = document.querySelector(".todo-form");
 let inputTodo = document.querySelector("#todo");
 let inputCompleted = document.querySelector("#completed");
 
+fetchTodos();
+// Todo Form Eventlistener
 todoForm.addEventListener("submit", (e) => {
   e.preventDefault();
   let todo = inputTodo.value;
   let completed = inputCompleted.value;
-  console.log("Todo ", inputTodo.value);
-  console.log("Completed ", inputCompleted.value);
 
   postTodo(todo, completed);
 });
-
-// let todos = [
-//   { todo_id: 4, todo: "buy a boat", completed: 0 },
-//   { todo_id: 5, todo: "Drive a car", completed: 1 },
-// ];
-
-fetchTodos();
 
 // GET request -> Todos
 async function fetchTodos() {
@@ -32,24 +25,7 @@ async function fetchTodos() {
   });
 
   const data = await response.json();
-  console.log(data);
   renderTodos(data);
-}
-
-// PATCH request -> Todos
-async function patchTodo(todo_id, completed) {
-  const response = await fetch("http://localhost:5050/todos", {
-    method: "PATCH",
-    body: JSON.stringify({ todo_id, completed }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  });
-
-  const data = await response.json();
-  console.log(data);
-  fetchTodos();
 }
 
 // POST request -> Todos
@@ -68,6 +44,22 @@ async function postTodo(todo, completed) {
   fetchTodos();
 }
 
+// PATCH request -> Todos
+async function patchTodo(todo_id, completed) {
+  const response = await fetch("http://localhost:5050/todos", {
+    method: "PATCH",
+    body: JSON.stringify({ todo_id, completed }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  const data = await response.json();
+  console.log("Patch Todo data -> ", data);
+  fetchTodos();
+}
+
 // DELET request -> Todos
 async function deleteTodo(todo_id) {
   const response = await fetch("http://localhost:5050/todos", {
@@ -79,8 +71,6 @@ async function deleteTodo(todo_id) {
     credentials: "include",
   });
 
-  // const data = await response.json();
-  // console.log(data);
   fetchTodos();
 }
 
@@ -110,8 +100,8 @@ function renderTodos(todos) {
     btnComplete.textContent = "Change";
     btnDelete.textContent = "Remove";
     let text;
-    console.log("Item ->", item);
 
+    // Changes completed from 0/1 to string
     if (item.completed === 0) {
       text = `${item.todo} Not Completed`;
       li.innerText = text;
@@ -120,23 +110,21 @@ function renderTodos(todos) {
       li.innerText = text;
     }
 
+    // Eventlistener for Updating todo completion
     btnComplete.addEventListener("click", () => {
       if (item.completed === 0) {
-        console.log("was 0 now 1");
-        // Fetch här
         patchTodo(item.todo_id, 1);
       } else {
-        console.log("Was 1 now 0");
         patchTodo(item.todo_id, 0);
       }
     });
 
+    // Eventlistener for Deleting todo item
     btnDelete.addEventListener("click", () => {
       deleteTodo(item.todo_id);
     });
 
     li.append(btnComplete, btnDelete);
     list.appendChild(li);
-    console.log(text);
   });
 }
