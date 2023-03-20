@@ -19,6 +19,8 @@ todoForm.addEventListener("submit", (e) => {
 //   { todo_id: 5, todo: "Drive a car", completed: 1 },
 // ];
 
+fetchTodos();
+
 // GET request -> Todos
 async function fetchTodos() {
   const response = await fetch("http://localhost:5050/todos", {
@@ -33,7 +35,6 @@ async function fetchTodos() {
   console.log(data);
   renderTodos(data);
 }
-fetchTodos();
 
 // PATCH request -> Todos
 async function patchTodo(todo_id, completed) {
@@ -67,16 +68,37 @@ async function postTodo(todo, completed) {
   fetchTodos();
 }
 
+// DELET request -> Todos
+async function deleteTodo(todo_id) {
+  const response = await fetch("http://localhost:5050/todos", {
+    method: "DELETE",
+    body: JSON.stringify({ todo_id }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  // const data = await response.json();
+  // console.log(data);
+  fetchTodos();
+}
+
 // Function for rendering Todos on Page
 function renderTodos(todos) {
   while (list.firstChild) {
     list.removeChild(list.lastChild);
   }
 
+  // Check not logged in
+  console.log("Todos ->", todos);
+
   todos.forEach((item) => {
     let li = document.createElement("li");
-    let btn = document.createElement("button");
-    btn.textContent = "Change";
+    let btnComplete = document.createElement("button");
+    let btnDelete = document.createElement("button");
+    btnComplete.textContent = "Change";
+    btnDelete.textContent = "Remove";
     let text;
     console.log("Item ->", item);
 
@@ -88,7 +110,7 @@ function renderTodos(todos) {
       li.innerText = text;
     }
 
-    btn.addEventListener("click", () => {
+    btnComplete.addEventListener("click", () => {
       if (item.completed === 0) {
         console.log("was 0 now 1");
         // Fetch här
@@ -99,7 +121,11 @@ function renderTodos(todos) {
       }
     });
 
-    li.appendChild(btn);
+    btnDelete.addEventListener("click", () => {
+      deleteTodo(item.todo_id);
+    });
+
+    li.append(btnComplete, btnDelete);
     list.appendChild(li);
     console.log(text);
   });
