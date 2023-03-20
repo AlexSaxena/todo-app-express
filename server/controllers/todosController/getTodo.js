@@ -1,6 +1,4 @@
 const mysql = require("mysql2");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const config = {
@@ -13,7 +11,7 @@ const config = {
 const pool = mysql.createPool(config);
 
 const getTodo = function getTodo(req, res) {
-  console.log("todos-req.loggedInUser ->", req.loggedInUser);
+  console.log("getTodos-req.loggedInUser ->", req.loggedInUser);
 
   let user_id = req.loggedInUser.user_id;
 

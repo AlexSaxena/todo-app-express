@@ -1,18 +1,18 @@
 console.log("General Kenobi");
 
-// Dependency pkts imports
+// Dependencies
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-// Routes & Middleware Imports
+// Routes & Middleware
 const { checkLoginToken } = require("./middlewares/checkLoginToken");
 const { userAuthRoutes } = require("./routes/userAuthRoutes");
 const { userTodoRoutes } = require("./routes/userTodosRoutes");
 
 const app = express();
 
-// Enables Cookies & JSON to be read
+// Enables Cors, Cookies & JSON to be read/used
 app.use(express.json());
 app.use(
   cors({
@@ -25,7 +25,7 @@ app.use(cookieParser());
 // Route -> /login & /register
 app.use("/", userAuthRoutes);
 
-// Routes -> Todos
+// Route -> Todos
 app.use("/todos", checkLoginToken, userTodoRoutes);
 
 // Server Port

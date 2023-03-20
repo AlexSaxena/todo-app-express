@@ -6,7 +6,6 @@ const SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 exports.checkLoginToken = function checkLoginToken(req, res, next) {
   if (!req.cookies.loginToken) {
-    // Maybe Add redirect to Login page
     res.status(404).json({ message: "No Active LoginToken" });
     return;
   }

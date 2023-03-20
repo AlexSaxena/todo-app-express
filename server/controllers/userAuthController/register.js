@@ -28,7 +28,7 @@ const register = function (req, res) {
       console.error(error);
       res.sendStatus(500);
     } else {
-      console.log(result);
+      console.log("Register -> ", result);
       res.json({ message: "New User Added", result: result }).status(200);
     }
   });

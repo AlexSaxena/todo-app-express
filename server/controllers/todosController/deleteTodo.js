@@ -18,7 +18,7 @@ const deleteTodo = function deleteTodo(req, res) {
 
   pool.execute(sqlDeleteTodo, [todo_id, user_id], (error, result) => {
     if (error) {
-      console.log("Error Sql Delete ->", error);
+      console.error("Error Sql Delete ->", error);
     } else {
       console.log("Delete result -> ", result);
       res.status(204);

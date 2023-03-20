@@ -13,7 +13,6 @@ const pool = mysql.createPool(config);
 const patchTodo = function patchTodo(req, res) {
   let user_id = req.loggedInUser.user_id;
   const { todo_id, completed } = req.body;
-  //const sqlTodoCompleted = `UPDATE todos SET completed = (? - 1)*-1 WHERE todo_id= ? AND user_id = ? `;
   const sqlTodoCompleted = `UPDATE todos SET completed = ? WHERE todo_id= ? AND user_id = ? `;
 
   pool.execute(

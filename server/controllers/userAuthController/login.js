@@ -25,7 +25,7 @@ const login = function login(req, res) {
     if (result.length < 1) {
       res.status(404).json({ message: "User Not Found" });
     } else {
-      console.log(result);
+      console.log("Login Result ->", result);
       const resPassword = result[0].password;
       const passCompare = bcrypt.compareSync(password, resPassword);
 
@@ -42,6 +42,7 @@ const login = function login(req, res) {
           maxAge: 4201337,
           sameSite: "none",
           httpOnly: true,
+          // Secure might hinder PostMan
           secure: true,
         });
 
