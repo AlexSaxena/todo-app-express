@@ -5,9 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="data:;base64,=" />
+    <script src="/client/javascript/todos.js" type="module"></script>
     <title>Document</title>
   </head>
   <body>
     <h1>Todos</h1>
+    <div>
+      <form class="todo-form">
+        <label for="todo">Todo</label>
+        <input type="text" name="todo" id="todo" />
+        <label for="completed">completed</label>
+        <select name="completed" id="completed">
+          <option value="0">Not Done</option>
+          <option value="1">Done</option>
+        </select>
+        <button class="todos-form-btn">Add Todo</button>
+      </form>
+    </div>
+    <h3 class="h3-response"></h3>
+    <div class="todos-container">
+      <ul class="todos-list"></ul>
+    </div>
   </body>
 </html>
