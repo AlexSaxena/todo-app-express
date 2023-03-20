@@ -26,7 +26,7 @@ const patchTodo = function patchTodo(req, res) {
         return;
       } else {
         console.log("Patch result -> ", result);
-        res.status(200).send("Patch Completed!");
+        res.status(200).json({ message: "Patch Completed!" });
         return;
       }
     }
