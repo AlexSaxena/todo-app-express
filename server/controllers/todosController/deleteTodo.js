@@ -21,8 +21,7 @@ const deleteTodo = function deleteTodo(req, res) {
       console.log("Error Sql Delete ->", error);
     } else {
       console.log("Delete result -> ", result);
-      let message = "Todo Removed";
-      res.status(204).json({ message });
+      res.status(204);
     }
   });
 };
