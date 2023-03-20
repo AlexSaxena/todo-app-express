@@ -9,6 +9,7 @@ const cors = require("cors");
 const { checkLoginToken } = require("./middlewares/checkLoginToken");
 const { userAuthRoutes } = require("./routes/userAuthRoutes");
 const { userTodoRoutes } = require("./routes/userTodosRoutes");
+const { friendRoutes } = require("./routes/friendRoutes");
 
 const app = express();
 
@@ -27,6 +28,9 @@ app.use("/", userAuthRoutes);
 
 // Route -> Todos
 app.use("/todos", checkLoginToken, userTodoRoutes);
+
+// Route -> Friends
+app.use("/friends", checkLoginToken, friendRoutes);
 
 // Server Port
 app.listen(5050, () => {
