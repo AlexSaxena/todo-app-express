@@ -1,5 +1,18 @@
 console.log("Hello from todos.js");
 let list = document.querySelector(".todos-list");
+let todoForm = document.querySelector(".todo-form");
+let inputTodo = document.querySelector("#todo");
+let inputCompleted = document.querySelector("#completed");
+
+todoForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  let todo = inputTodo.value;
+  let completed = inputCompleted.value;
+  console.log("Todo ", inputTodo.value);
+  console.log("Completed ", inputCompleted.value);
+
+  postTodo(todo, completed);
+});
 
 // let todos = [
 //   { todo_id: 4, todo: "buy a boat", completed: 0 },
@@ -18,7 +31,7 @@ async function fetchTodos() {
 
   const data = await response.json();
   console.log(data);
-  addTodos(data);
+  renderTodos(data);
 }
 fetchTodos();
 
@@ -38,8 +51,24 @@ async function patchTodo(todo_id, completed) {
   fetchTodos();
 }
 
+// POST request -> Todos
+async function postTodo(todo, completed) {
+  const response = await fetch("http://localhost:5050/todos", {
+    method: "POST",
+    body: JSON.stringify({ todo, completed }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  const data = await response.json();
+  console.log("Add Todo data -> ", data);
+  fetchTodos();
+}
+
 // Function for rendering Todos on Page
-function addTodos(todos) {
+function renderTodos(todos) {
   while (list.firstChild) {
     list.removeChild(list.lastChild);
   }
