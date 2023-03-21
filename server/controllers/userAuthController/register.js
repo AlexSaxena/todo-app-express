@@ -1,6 +1,7 @@
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
+const { authSchema } = require("../../model/authSchema");
 
 // MySql Configurations / Definitions
 const config = {
@@ -15,6 +16,13 @@ const pool = mysql.createPool(config);
 const register = function (req, res) {
   const { username, password } = req.body;
 
+  let validation = authSchema.validate(req.body);
+  if (validation.error) {
+    return res
+      .json({ message: validation.error.details[0].message })
+      .status(406);
+  }
+
   const salt = bcrypt.genSaltSync(10);
   const cryptedPassword = bcrypt.hashSync(password, salt);
 
@@ -25,7 +33,7 @@ const register = function (req, res) {
 
   pool.execute(sql, [username, cryptedPassword], (error, result) => {
     if (error) {
-      console.error(error);
+      console.error("SQL Register ->", error);
       res.sendStatus(500);
     } else {
       console.log("Register -> ", result);

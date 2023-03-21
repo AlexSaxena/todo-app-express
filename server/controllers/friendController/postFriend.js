@@ -1,5 +1,6 @@
 const mysql = require("mysql2");
 require("dotenv").config();
+const { friendSchema } = require("../../model/friendSchema");
 
 const config = {
   user: process.env.DATABASE_USER,
@@ -12,6 +13,14 @@ const pool = mysql.createPool(config);
 
 const postFriend = async function postFriend(req, res) {
   let user_id = req.loggedInUser.user_id;
+
+  let validation = friendSchema.validate(req.body);
+  if (validation.error) {
+    return res
+      .json({ message: validation.error.details[0].message })
+      .status(406);
+  }
+
   const { username } = req.body;
   const sqlFindPerson = `SELECT user_id, username FROM users WHERE username = ?; `;
   const sqlCheckPerson = `SELECT user_id, friend_name FROM friends WHERE user_id = ? AND friend_name = ?; `;

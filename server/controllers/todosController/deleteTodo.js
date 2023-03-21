@@ -1,5 +1,6 @@
 const mysql = require("mysql2");
 require("dotenv").config();
+const { todoDeleteSchema } = require("../../model/todoDeleteSchema");
 
 const config = {
   user: process.env.DATABASE_USER,
@@ -14,6 +15,13 @@ const deleteTodo = function deleteTodo(req, res) {
   let user_id = req.loggedInUser.user_id;
   const { todo_id } = req.body;
 
+  let validation = todoDeleteSchema.validate(req.body);
+  if (validation.error) {
+    return res
+      .json({ message: validation.error.details[0].message })
+      .status(406);
+  }
+
   const sqlDeleteTodo = `DELETE FROM todos WHERE todo_id = ? AND user_id = ?;`;
 
   pool.execute(sqlDeleteTodo, [todo_id, user_id], (error, result) => {
@@ -21,7 +29,7 @@ const deleteTodo = function deleteTodo(req, res) {
       console.error("Error Sql Delete ->", error);
     } else {
       console.log("Delete result -> ", result);
-      res.status(204);
+      res.json({ message: "Item Removed" }).status(204);
     }
   });
 };

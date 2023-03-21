@@ -2,6 +2,7 @@ const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const { authSchema } = require("../../model/authSchema");
 
 // MySql Configurations / Definitions
 const config = {
@@ -15,6 +16,14 @@ const pool = mysql.createPool(config);
 
 const login = function login(req, res) {
   const { username, password } = req.body;
+
+  let validation = authSchema.validate(req.body);
+  if (validation.error) {
+    return res
+      .json({ message: validation.error.details[0].message })
+      .status(406);
+  }
+
   const sqlUPassword = `Select user_id, username, password from users WHERE username = ?`;
 
   pool.execute(sqlUPassword, [username], (error, result) => {

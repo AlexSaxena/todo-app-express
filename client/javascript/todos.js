@@ -70,8 +70,9 @@ async function deleteTodo(todo_id) {
     },
     credentials: "include",
   });
-
-  fetchTodos();
+  const data = await response.json();
+  console.log("DELETE Todo data -> ", data);
+  await fetchTodos();
 }
 
 // Function for rendering Todos on Page

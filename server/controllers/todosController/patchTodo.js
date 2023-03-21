@@ -1,5 +1,6 @@
 const mysql = require("mysql2");
 require("dotenv").config();
+const { todoPatchSchema } = require("../../model/todoPatchSchema");
 
 const config = {
   user: process.env.DATABASE_USER,
@@ -13,6 +14,14 @@ const pool = mysql.createPool(config);
 const patchTodo = function patchTodo(req, res) {
   let user_id = req.loggedInUser.user_id;
   const { todo_id, completed } = req.body;
+
+  let validation = todoPatchSchema.validate(req.body);
+  if (validation.error) {
+    return res
+      .json({ message: validation.error.details[0].message })
+      .status(406);
+  }
+
   const sqlTodoCompleted = `UPDATE todos SET completed = ? WHERE todo_id= ? AND user_id = ? `;
 
   pool.execute(
