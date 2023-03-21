@@ -103,10 +103,10 @@ function renderTodos(todos) {
 
     // Changes completed from 0/1 to string
     if (item.completed === 0) {
-      text = `${item.todo} Not Completed`;
+      text = `Todo:${item.todo} - Status: Not Completed `;
       li.innerText = text;
     } else {
-      text = `${item.todo} Completed`;
+      text = `Todo:${item.todo} - Status: Completed `;
       li.innerText = text;
     }
 
