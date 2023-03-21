@@ -11,19 +11,21 @@ const config = {
 const pool = mysql.createPool(config);
 
 const getTodo = function getTodo(req, res) {
-  console.log("getTodos-req.loggedInUser ->", req.loggedInUser);
-
   let user_id = req.loggedInUser.user_id;
 
-  const sqlTodos = `SELECT todo_id, todo, completed FROM todos WHERE user_id=?`;
+  const sqlTodos = `
+        SELECT todo_id, todo, completed 
+        FROM todos 
+        WHERE user_id=?
+        `;
 
   pool.execute(sqlTodos, [user_id], (error, result) => {
     if (error) {
-      console.error(error);
+      console.error("getTodo err ->", error);
       res.sendStatus(500);
       return;
     } else {
-      console.log(result);
+      console.log("getTodos res ->", result);
       res.json(result).status(200);
       return;
     }

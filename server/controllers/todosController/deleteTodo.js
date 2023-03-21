@@ -22,7 +22,11 @@ const deleteTodo = function deleteTodo(req, res) {
       .status(406);
   }
 
-  const sqlDeleteTodo = `DELETE FROM todos WHERE todo_id = ? AND user_id = ?;`;
+  const sqlDeleteTodo = `
+        DELETE FROM todos 
+        WHERE todo_id = ? 
+        AND user_id = ?
+        ;`;
 
   pool.execute(sqlDeleteTodo, [todo_id, user_id], (error, result) => {
     if (error) {

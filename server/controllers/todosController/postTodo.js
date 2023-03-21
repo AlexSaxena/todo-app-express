@@ -22,15 +22,18 @@ const postTodo = function postTodo(req, res) {
       .status(406);
   }
 
-  const sqlNewTodo = `INSERT INTO todos(user_id, todo, completed) VALUES(?,?,?)`;
+  const sqlNewTodo = `
+        INSERT INTO todos(user_id, todo, completed) 
+        VALUES(?,?,?)
+        `;
 
   pool.execute(sqlNewTodo, [user_id, todo, completed], (error, result) => {
     if (error) {
-      console.error(error);
+      console.error("Post Err ->", error);
       res.sendStatus(500);
       return;
     } else {
-      console.log(result);
+      console.log("Post Res ->", result);
       res.status(200).json({ message: "New Todo Added!" });
       return;
     }

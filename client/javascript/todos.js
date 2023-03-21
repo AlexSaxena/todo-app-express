@@ -1,4 +1,3 @@
-console.log("Hello from todos.js");
 let list = document.querySelector(".todos-list");
 let todoForm = document.querySelector(".todo-form");
 let inputTodo = document.querySelector("#todo");

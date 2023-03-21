@@ -22,7 +22,12 @@ const patchTodo = function patchTodo(req, res) {
       .status(406);
   }
 
-  const sqlTodoCompleted = `UPDATE todos SET completed = ? WHERE todo_id= ? AND user_id = ? `;
+  const sqlTodoCompleted = `
+        UPDATE todos 
+        SET completed = ? 
+        WHERE todo_id= ? 
+        AND user_id = ? 
+        `;
 
   pool.execute(
     sqlTodoCompleted,

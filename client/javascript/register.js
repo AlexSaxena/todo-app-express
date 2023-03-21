@@ -1,5 +1,3 @@
-console.log("Hello from register.js");
-
 let registerForm = document.querySelector(".register-form");
 let inputUsername = document.querySelector("#username");
 let inputPassword = document.querySelector("#password");
@@ -23,7 +21,6 @@ registerForm.addEventListener("submit", async (e) => {
 
   const data = await response.json();
   console.log("Data ->", data);
-  console.log("response ->", response);
 
   responseOutput.textContent = data.message;
 });

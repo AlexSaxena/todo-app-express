@@ -1,5 +1,3 @@
-console.log("Hello from Friends.js");
-
 let friendForm = document.querySelector(".friend-form");
 let inputUsername = document.querySelector("#username");
 let formRegisterBtn = document.querySelector(".friend-form-btn");
@@ -27,7 +25,6 @@ async function addFriend(username) {
 
   const data = await response.json();
   responseOutput.textContent = data.message;
-  console.log("Add Todo data -> ", data);
   await fetchTodos();
 }
 

@@ -22,9 +22,23 @@ const postFriend = async function postFriend(req, res) {
   }
 
   const { username } = req.body;
-  const sqlFindPerson = `SELECT user_id, username FROM users WHERE username = ?; `;
-  const sqlCheckPerson = `SELECT user_id, friend_name FROM friends WHERE user_id = ? AND friend_name = ?; `;
-  const sqlAddFriend = `INSERT INTO friends(user_id, friend_name) VALUES(?, ?)`;
+  const sqlFindPerson = `
+          SELECT user_id, username 
+          FROM users 
+          WHERE username = ?;
+        `;
+
+  const sqlCheckPerson = `
+          SELECT user_id, friend_name 
+          FROM friends 
+          WHERE user_id = ? 
+          AND friend_name = ?;
+        `;
+
+  const sqlAddFriend = `
+          INSERT INTO friends(user_id, friend_name) 
+          VALUES(?, ?)
+        `;
 
   findFriend(sqlFindPerson, username);
 

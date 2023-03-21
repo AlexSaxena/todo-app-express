@@ -11,7 +11,6 @@ const config = {
 const pool = mysql.createPool(config);
 
 const getFriend = function getFriend(req, res) {
-  console.log("getFriend-req.loggedInUser ->", req.loggedInUser);
   let user_id = req.loggedInUser.user_id;
 
   const sqlTodos = `

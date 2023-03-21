@@ -24,7 +24,11 @@ const login = function login(req, res) {
       .status(406);
   }
 
-  const sqlUPassword = `Select user_id, username, password from users WHERE username = ?`;
+  const sqlUPassword = `
+        Select user_id, username, password
+        from users
+        WHERE username = ?
+      `;
 
   pool.execute(sqlUPassword, [username], (error, result) => {
     if (error) {
@@ -55,12 +59,10 @@ const login = function login(req, res) {
           secure: true,
         });
 
-        res
-          .json({ message: "Successful login", loginToken: loginToken })
-          .status(200);
+        res.json({ message: "Successful login" }).status(200);
         return;
       } else {
-        res.json({ message: "Unsuccessful login" }).sendStatus(401);
+        res.json({ message: "Unsuccessful login" }).status(401);
       }
     }
   });
